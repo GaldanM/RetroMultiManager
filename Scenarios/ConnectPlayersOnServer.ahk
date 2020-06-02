@@ -16,6 +16,7 @@ Main:
 
         window.Activate()
         window.WaitActive()
+        Sleep, 50 * Settings.Speed
         
         ;Get server slot position
         inputX := Scenario.GetValueFromIni(section, "x" window.account.ServerSlot)
@@ -29,6 +30,7 @@ Main:
 
         ;Connect on server
         MouseMove, inputX, inputY, 5 * Settings.Speed
+        Sleep, 50 * Settings.Speed
         Click, 2
 
         SleepHandler(-100)
@@ -47,9 +49,10 @@ Main:
 
         window.Activate()
         window.WaitActive()
+        Sleep, 50 * Settings.Speed
 
         ;Get player slot position
-        inputX := Scenario.GetValueFromIni(section, "x" window.account.PlayerSlot)
+        inputX := Scenario.GetValueFromIni(section, "x" window.account.PlayerSlot) - 30
         inputY := Scenario.GetValueFromIni(section, "y" window.account.PlayerSlot)
         If (inputX = -1 || inputY = -1)
         {
@@ -60,7 +63,11 @@ Main:
 
         ;Connect player
         MouseMove, inputX, inputY, 5 * Settings.Speed
-        Click, 3
+        Sleep, 50 * Settings.Speed
+        Click
+        Sleep, 50 * Settings.Speed
+        MouseMove, 960, 840, 5 * Settings.Speed
+        Click
 
         SleepHandler(-100)
 

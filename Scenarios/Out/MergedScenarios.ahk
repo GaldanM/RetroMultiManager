@@ -52,6 +52,7 @@ ConnectPlayersOnServer:
 
         window.Activate()
         window.WaitActive()
+        Sleep, 50 * Settings.Speed
         
         ;Get server slot position
         inputX := Scenario.GetValueFromIni(section, "x" window.account.ServerSlot)
@@ -65,6 +66,7 @@ ConnectPlayersOnServer:
 
         ;Connect on server
         MouseMove, inputX, inputY, 5 * Settings.Speed
+        Sleep, 50 * Settings.Speed
         Click, 2
 
         SleepHandler(-100)
@@ -83,9 +85,10 @@ ConnectPlayersOnServer:
 
         window.Activate()
         window.WaitActive()
+        Sleep, 50 * Settings.Speed
 
         ;Get player slot position
-        inputX := Scenario.GetValueFromIni(section, "x" window.account.PlayerSlot)
+        inputX := Scenario.GetValueFromIni(section, "x" window.account.PlayerSlot) - 30
         inputY := Scenario.GetValueFromIni(section, "y" window.account.PlayerSlot)
         If (inputX = -1 || inputY = -1)
         {
@@ -96,7 +99,11 @@ ConnectPlayersOnServer:
 
         ;Connect player
         MouseMove, inputX, inputY, 5 * Settings.Speed
-        Click, 3
+        Sleep, 50 * Settings.Speed
+        Click
+        Sleep, 50 * Settings.Speed
+        MouseMove, 960, 840, 5 * Settings.Speed
+        Click
 
         SleepHandler(-100)
 
@@ -169,7 +176,8 @@ LoginAccounts:
         return
     }
 
-    Loop, % API.GetNbWindows() {
+    Loop, % API.GetNbWindows() 
+    {
         API.LogWrite("Trying to connect account #" A_Index ".")
 
         window := API.GetWindow(A_Index)
@@ -186,8 +194,31 @@ LoginAccounts:
         window.WaitActive()
         window.Maximize()
 
-        ;Username
+        ;Validate Server
         Sleep, 50 * Settings.Speed
+        MouseMove, 1520, 340, 5 * Settings.Speed
+        Click
+        Sleep, 50 * Settings.Speed
+
+        SleepHandler(0)
+    }
+    Loop, % API.GetNbWindows() 
+    {
+        window := API.GetWindow(A_Index)
+        If (window.isConnected = True)
+        {
+            API.LogWrite("Skipping window #" A_Index ", already connected.")
+            Continue
+        }
+        
+        If (Settings.WaitForAnkamaShield = True)
+            MsgBox, % Translate("UnlockShield", API.GetUsername(A_Index))
+
+        window.Activate()
+        window.WaitActive()
+        Sleep, 50 * Settings.Speed
+
+        ;Username
         MouseMove, inputX, inputY, 5 * Settings.Speed
         Click
         Sleep, 50 * Settings.Speed
@@ -204,6 +235,7 @@ LoginAccounts:
         Send, {Tab}
         Sleep, 50 * Settings.Speed
         Send {Enter}
+
         API.GuiUpdateProgressBar(i, API.GetNbWindows())
         i++
         SleepHandler(0)

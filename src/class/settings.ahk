@@ -137,7 +137,7 @@ Class Settings {
             Logger.Write("Toggling function hotkeys off.")
         }
         Loop, %NbAccountPerProfile% {
-            keyName := "F" A_Index
+            keyName := "F" A_Index+1
             Hotkey, %keyName%, ActivateWindow%A_Index%, %options%
         }
     }
